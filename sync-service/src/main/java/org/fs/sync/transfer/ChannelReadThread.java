@@ -41,6 +41,7 @@ public class ChannelReadThread extends Thread {
 			throw new RuntimeException(e);
 		}finally{
 			IOUtils.closeQuietly(reader);
+			IOUtils.closeQuietly(socket);
 		}
 	}
 }
