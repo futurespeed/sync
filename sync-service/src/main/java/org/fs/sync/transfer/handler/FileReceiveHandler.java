@@ -19,6 +19,7 @@ public class FileReceiveHandler {
 			File file = new File(tempPath);
 			String localFilehash = FileHashUtil.getSha1(file);
 			
+			//TODO
 			System.out.println("receive file:" + name + ",hash:" + hash + ",localFilehash:" + localFilehash);
 			
 			File dir = new File("D:/temp/sync/dest/1" + path);

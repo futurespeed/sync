@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.commons.io.IOUtils;
 import org.fs.sync.transfer.data.DataFrame;
 import org.fs.sync.transfer.data.DataFrameSerializer;
 import org.fs.sync.transfer.handler.FrameWriteHandler;
@@ -139,13 +140,7 @@ public class ChannelWriter {
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}finally{
-			if (in != null) {
-				try {
-					in.close();
-				} catch (Exception e) {
-					//TODO warn
-				}
-			}
+			IOUtils.closeQuietly(in);
 		}
 	}
 }

@@ -9,6 +9,8 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.io.IOUtils;
+
 import com.alibaba.fastjson.JSON;
 
 public class TransportServer {
@@ -87,22 +89,9 @@ public class TransportServer {
 							writer.flush();
 						}
 					}finally{
-						if(writer != null){
-							try{
-								writer.close();
-							}catch(Exception e){
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
-						if(reader != null){
-							try{
-								reader.close();
-							}catch(Exception e){
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
+						server.socketChannelMap.remove(channelId);
+						IOUtils.closeQuietly(reader);
+						IOUtils.closeQuietly(writer);
 						if(socket != null){
 							try{
 								socket.close();
@@ -121,6 +110,18 @@ public class TransportServer {
 						}
 					}
 				}else if("reader".equals(infoMap.get("type"))){
+					Socket oldSocket = server.socketChannelMap.get(channelId);
+					if(oldSocket != null){
+						if(socket != null){
+							try{
+								socket.close();
+							}catch(Exception e){
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+						throw new RuntimeException("read channel [" + channelId + "] already exists !");
+					}
 					server.socketChannelMap.put(channelId, socket);
 				}
 			}catch(Exception e){

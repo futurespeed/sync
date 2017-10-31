@@ -111,18 +111,4 @@ public class CipherIOUtil {
 		cout.close();
 		in.close();
 	}
-
-	public static void main(String[] args) throws Exception {
-		byte[] key = genKey();
-		System.out.println(Arrays.toString(key));
-		// byte[] key = new byte[] { 49, 38, -88, -75, 103, -50, 94, -92 }; //
-		// 字节数必须是8的整数倍
-		// 文件加密
-		encode(new FileInputStream("D:/temp/test/test.html"), new FileOutputStream("D:/temp/test/test_enc.html"), key);
-
-		// 文件解密
-		decode(new FileInputStream("D:/temp/test/test_enc.html"), new FileOutputStream("D:/temp/test/test_dec.html"),
-				key);
-
-	}
 }

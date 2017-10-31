@@ -1,11 +1,11 @@
 package org.fs.sync.transfer;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.IOUtils;
 import org.fs.sync.transfer.data.DataFrame;
 import org.fs.sync.transfer.data.DataFrameSerializer;
 import org.fs.sync.transfer.handler.FrameReadHandler;
@@ -40,14 +40,7 @@ public class ChannelReadThread extends Thread {
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}finally{
-			if(reader != null){
-				try {
-					reader.close();
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+			IOUtils.closeQuietly(reader);
 		}
 	}
 }

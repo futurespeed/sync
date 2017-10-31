@@ -5,6 +5,7 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.IOUtils;
 import org.fs.sync.transfer.data.DataFrame;
 import org.fs.sync.transfer.data.DataFrameSerializer;
 
@@ -49,12 +50,6 @@ public class FrameWriteHandler {
 	}
 	
 	public void release(){
-		try{
-			if(writer != null){
-				writer.close();
-			}
-		}catch(Exception e){
-			//TODO
-		}
+		IOUtils.closeQuietly(writer);
 	}
 }

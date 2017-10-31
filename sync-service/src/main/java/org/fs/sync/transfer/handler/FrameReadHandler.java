@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Map;
 
+import org.apache.commons.io.IOUtils;
 import org.fs.sync.transfer.data.DataFrame;
 
 import com.alibaba.fastjson.JSON;
@@ -32,7 +33,7 @@ public class FrameReadHandler {
 		try {
 			if (3000 == frame.getType()) {
 				if (fout != null) {
-					fout.close();
+					IOUtils.closeQuietly(fout);
 					infoMap.put("_temp_path", file.getAbsolutePath());
 					fout = null;
 					file = null;
@@ -58,7 +59,7 @@ public class FrameReadHandler {
 	public void release() {
 		try {
 			if (fout != null) {
-				fout.close();
+				IOUtils.closeQuietly(fout);
 				infoMap.put("_temp_path", file.getAbsolutePath());
 				fout = null;
 				file = null;
