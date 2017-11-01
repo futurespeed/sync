@@ -73,8 +73,9 @@ public class TransportServer {
 			try{
 				BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
 				String line = reader.readLine();
-				Map infoMap = JSON.parseObject(line, Map.class);
+				Map<?, ?> infoMap = JSON.parseObject(line, Map.class);
 				String channelId = infoMap.get("userId") + "_" + infoMap.get("configId");
+				//TODO permission
 				if("writer".equals(infoMap.get("type"))){
 					Socket destSocket = server.socketChannelMap.get(channelId);
 					if(null == destSocket){
@@ -114,7 +115,7 @@ public class TransportServer {
 					if(oldSocket != null){
 						if(socket != null){
 							try{
-								socket.close();
+								socket.close();//FIXME
 							}catch(Exception e){
 								// TODO Auto-generated catch block
 								e.printStackTrace();
