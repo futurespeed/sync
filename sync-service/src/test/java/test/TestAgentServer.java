@@ -1,7 +1,12 @@
 package test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.fs.sync.agent.AgentConnector;
 import org.fs.sync.agent.AgentServer;
+
+import com.alibaba.fastjson.JSON;
 
 public class TestAgentServer {
 	public static void main(String[] args) throws Exception {
@@ -17,7 +22,12 @@ public class TestAgentServer {
 		
 		Thread.sleep(3000);
 		
-		server.sendCmdToChannel("1234_abc", "{\"type\":\"test_cmd\"}");
+		
+		Map<String, Object> infoMap = new HashMap<String, Object>();
+		infoMap.put("type", "open_read_channel");
+		infoMap.put("userId", "1234");
+		infoMap.put("configId", "567");
+		server.sendCmdToChannel("1234_abc", JSON.toJSONString(infoMap));
 		
 	}
 }

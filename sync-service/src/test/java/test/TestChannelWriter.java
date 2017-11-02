@@ -7,8 +7,8 @@ import org.fs.sync.transfer.ChannelWriter;
 public class TestChannelWriter {
 	public static void main(String[] args) {
 		ChannelWriter writer = new ChannelWriter();
-		writer.setUserId("gjx");
-		writer.setConfigId("123");
+		writer.setUserId("1234");
+		writer.setConfigId("567");
 		writer.init();
 		try{
 			writer.open();

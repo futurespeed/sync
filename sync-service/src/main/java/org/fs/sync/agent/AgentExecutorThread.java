@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
+import org.fs.sync.transfer.ChannelReader;
 
 import com.alibaba.fastjson.JSON;
 
@@ -37,6 +38,15 @@ public class AgentExecutorThread extends Thread{
 	public void execute(String cmd) {
 		Map<?, ?> infoMap = JSON.parseObject(cmd, Map.class);
 		System.out.println(infoMap);
+		String type = String.valueOf(infoMap.get("type"));
+		if("open_read_channel".equals(type)){
+			ChannelReader reader = new ChannelReader();
+			reader.setUserId((String) infoMap.get("userId"));
+			reader.setConfigId((String) infoMap.get("configId"));
+//			reader.setWorkDir("D:/temp/sync/work/123");
+			reader.init();
+			reader.open();
+		}
 		//TODO
 	}
 }

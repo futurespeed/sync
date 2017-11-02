@@ -10,10 +10,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSON;
 
 public class TransportServer {
+	
+	private static final Logger LOG = LoggerFactory.getLogger(TransportServer.class);
 	
 	private int port = 20008;
 	
@@ -70,8 +74,9 @@ public class TransportServer {
 		
 		@Override
 		public void run() {
+			BufferedReader reader = null;
 			try{
-				BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
+				reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
 				String line = reader.readLine();
 				Map<?, ?> infoMap = JSON.parseObject(line, Map.class);
 				String channelId = infoMap.get("userId") + "_" + infoMap.get("configId");
@@ -79,6 +84,7 @@ public class TransportServer {
 				if("writer".equals(infoMap.get("type"))){
 					Socket destSocket = server.socketChannelMap.get(channelId);
 					if(null == destSocket){
+						IOUtils.closeQuietly(socket);//FIXME
 						throw new RuntimeException("cannot find reader channel !");
 					}
 					BufferedWriter writer = null;
@@ -97,16 +103,14 @@ public class TransportServer {
 							try{
 								socket.close();
 							}catch(Exception e){
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+								LOG.error("fail to close input socket", e);
 							}
 						}
 						if(destSocket != null){
 							try{
 								destSocket.close();
 							}catch(Exception e){
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+								LOG.error("fail to close output socket", e);
 							}
 						}
 					}
@@ -117,8 +121,7 @@ public class TransportServer {
 							try{
 								socket.close();//FIXME
 							}catch(Exception e){
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+								LOG.error("fail to close input socket", e);
 							}
 						}
 						throw new RuntimeException("read channel [" + channelId + "] already exists !");
