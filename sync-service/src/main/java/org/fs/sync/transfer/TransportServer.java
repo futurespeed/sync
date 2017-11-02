@@ -117,14 +117,12 @@ public class TransportServer {
 				}else if("reader".equals(infoMap.get("type"))){
 					Socket oldSocket = server.socketChannelMap.get(channelId);
 					if(oldSocket != null){
-						if(socket != null){
-							try{
-								socket.close();//FIXME
-							}catch(Exception e){
-								LOG.error("fail to close input socket", e);
-							}
+						try{
+							oldSocket.close();//FIXME
+						}catch(Exception e){
+							LOG.error("fail to close input socket", e);
 						}
-						throw new RuntimeException("read channel [" + channelId + "] already exists !");
+						LOG.warn("read channel [" + channelId + "] already exists, close recent channel !");
 					}
 					server.socketChannelMap.put(channelId, socket);
 				}

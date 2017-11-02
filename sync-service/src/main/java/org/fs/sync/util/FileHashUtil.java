@@ -2,10 +2,13 @@ package org.fs.sync.util;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.lang.reflect.Method;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.security.AccessController;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.PrivilegedAction;
 
 public class FileHashUtil {
 
@@ -22,17 +25,30 @@ public class FileHashUtil {
 		try {
 			MessageDigest messagedigest = MessageDigest.getInstance("SHA-1");
 			FileInputStream in = null;
+			FileChannel ch = null;
+			MappedByteBuffer byteBuffer = null;
 			try {
 				in = new FileInputStream(file);
-				FileChannel ch = in.getChannel();
-				MappedByteBuffer byteBuffer = ch.map(FileChannel.MapMode.READ_ONLY, 0, file.length());
+				ch = in.getChannel();
+				byteBuffer = ch.map(FileChannel.MapMode.READ_ONLY, 0, file.length());
 				messagedigest.update(byteBuffer);
 				return bufferToHex(messagedigest.digest());
 			} finally {
+				if(byteBuffer != null){
+					clean(byteBuffer);
+				}
+				if (ch != null) {
+					try {
+						ch.close();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
 				if (in != null) {
 					try {
 						in.close();
 					} catch (Exception e) {
+						e.printStackTrace();
 					}
 				}
 			}
@@ -41,10 +57,6 @@ public class FileHashUtil {
 		}
 	}
 
-	/**
-	 * @Description 计算二进制数据
-	 * @return String
-	 */
 	private static String bufferToHex(byte bytes[]) {
 		return bufferToHex(bytes, 0, bytes.length);
 	}
@@ -63,5 +75,21 @@ public class FileHashUtil {
 		char c1 = hexDigits[bt & 0xf];
 		stringbuffer.append(c0);
 		stringbuffer.append(c1);
+	}
+	
+	private static void clean(final Object buffer) throws Exception {
+		AccessController.doPrivileged(new PrivilegedAction() {
+			public Object run() {
+				try {
+					Method getCleanerMethod = buffer.getClass().getMethod("cleaner", new Class[0]);
+					getCleanerMethod.setAccessible(true);
+					sun.misc.Cleaner cleaner = (sun.misc.Cleaner) getCleanerMethod.invoke(buffer, new Object[0]);
+					cleaner.clean();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				return null;
+			}
+		});
 	}
 }

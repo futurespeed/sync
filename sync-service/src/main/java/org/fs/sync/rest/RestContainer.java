@@ -19,6 +19,8 @@ public class RestContainer {
 	public static void main(String[] args) {
 		try {
             System.out.println("\"Sync\" Jersey App on Netty container.");
+            
+            ServerContext.init();
 
             ResourceConfig resourceConfig = new ResourceConfig(SyncResource.class);
             final Channel server = NettyHttpContainerProvider.createHttp2Server(BASE_URI, resourceConfig, null);
