@@ -46,6 +46,7 @@ public class TransportServer {
 		
 		public ConnectThread(TransportServer server) {
 			this.server = server;
+			setDaemon(true);
 		}
 		
 		@Override
@@ -70,6 +71,7 @@ public class TransportServer {
 		public ProcessThread(TransportServer server, Socket socket) {
 			this.server = server;
 			this.socket = socket;
+			setDaemon(true);
 		}
 		
 		@Override

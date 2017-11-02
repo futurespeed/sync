@@ -60,6 +60,7 @@ public class AgentServer {
 		
 		public ConnectThread(AgentServer server) {
 			this.server = server;
+			setDaemon(true);
 		}
 		
 		@Override
@@ -83,6 +84,7 @@ static class ProcessThread extends Thread {
 		private Socket socket;
 		
 		public ProcessThread(AgentServer server, Socket socket) {
+			setDaemon(true);
 			this.server = server;
 			this.socket = socket;
 		}

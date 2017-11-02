@@ -19,6 +19,7 @@ public class ChannelReadThread extends Thread {
 	public ChannelReadThread(Socket socket, FrameReadHandler frameReadHandler) {
 		this.socket = socket;
 		this.frameReadHandler = frameReadHandler;
+		setDaemon(true);
 	}
 	
 	@Override
