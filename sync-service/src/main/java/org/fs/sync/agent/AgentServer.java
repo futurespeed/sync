@@ -8,10 +8,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSON;
 
 public class AgentServer {
+	
+	private static final Logger LOG = LoggerFactory.getLogger(AgentServer.class);
+	
 	private int port = 20007;
 	
 	private ServerSocket serverSocket;
@@ -99,8 +104,8 @@ static class ProcessThread extends Thread {
 				Socket recentSocket = server.socketChannelMap.get(channelId);
 				//TODO permission
 				if(recentSocket != null){
-					socket.close();//FIXME
-					throw new RuntimeException("agent channel [" + channelId + "] already exists !");
+					LOG.warn("agent channel [" + channelId + "] already exists, close recent agent socket !");
+					IOUtils.closeQuietly(recentSocket);
 				}
 				server.socketChannelMap.put(channelId, socket);
 			}catch(Exception e){

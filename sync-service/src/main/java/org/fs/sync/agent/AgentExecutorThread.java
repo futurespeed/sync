@@ -16,7 +16,6 @@ public class AgentExecutorThread extends Thread{
 	
 	public AgentExecutorThread(Socket socket){
 		this.socket = socket;
-		setDaemon(true);
 	}
 	
 	@Override
