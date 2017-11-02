@@ -5,8 +5,13 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.fs.sync.util.FileHashUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FileReceiveHandler {
+	
+	private static final Logger LOG = LoggerFactory.getLogger(FileReceiveHandler.class);
+	
 	public void handle(Map<String, Object> infoMap){
 		try{
 			String configId = (String) infoMap.get("configId");
@@ -19,19 +24,28 @@ public class FileReceiveHandler {
 			File file = new File(tempPath);
 			String localFilehash = FileHashUtil.getSha1(file);
 			
-			//TODO
-			System.out.println("receive file:" + name + ",hash:" + hash + ",localFilehash:" + localFilehash);
+			LOG.info("receive file:" + name + ",size:" + size + ",hash:" + hash + ",localFilehash:" + localFilehash);
 			
-			File dir = new File("D:/temp/sync/dest/1" + path);
-			if(!dir.exists()){
-				dir.mkdirs();
+			if(localFilehash.equals(hash)){
+				File dir = new File(getPathByConfigId(configId) + path);
+				if(!dir.exists()){
+					dir.mkdirs();
+				}
+				File destFile = new File(dir, name);
+				FileUtils.copyFile(file, destFile);
+				destFile.setLastModified(Long.parseLong(lastModified));
+			}else{
+				LOG.warn("ignore file[" + name + "], because hash is not the same !");
 			}
-			File destFile = new File(dir, name);
-			FileUtils.copyFile(file, destFile);
-			destFile.setLastModified(Long.parseLong(lastModified));
 			file.delete();
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}
+	}
+	
+	protected String getPathByConfigId(String configId){
+		//TODO getPathByConfigId
+		String path = "D:/temp/sync/dest/1";
+		return path;
 	}
 }
