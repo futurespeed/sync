@@ -26,7 +26,7 @@ public class SyncResource {
 			@QueryParam("configId") String configId,
 			@QueryParam("clientId") String clientId,
 			@QueryParam("token") String token){
-		LOG.debug("SyncResource.openReadChannel[userId: " + userId + ", configId: " + configId + ", clientId: " + clientId + ", token: " + token + "]");
+		LOG.trace("SyncResource.openReadChannel[userId: " + userId + ", configId: " + configId + ", clientId: " + clientId + ", token: " + token + "]");
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		
 		String channelId = userId + "_" + clientId;

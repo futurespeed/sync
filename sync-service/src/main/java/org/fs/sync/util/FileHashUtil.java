@@ -7,19 +7,22 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.security.AccessController;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.security.PrivilegedAction;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class FileHashUtil {
+
+	private static final Logger LOG = LoggerFactory.getLogger(FileHashUtil.class);
 
 	protected static char hexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e',
 			'f' };
 
 	/***
-	 * 计算SHA1码
+	 * 计算文件SHA1码（适用于上G大的文件）
 	 * 
-	 * @return String 适用于上G大的文件
-	 * @throws NoSuchAlgorithmException
+	 * @return SHA1码
 	 */
 	public static String getSha1(File file) {
 		try {
@@ -34,21 +37,21 @@ public class FileHashUtil {
 				messagedigest.update(byteBuffer);
 				return bufferToHex(messagedigest.digest());
 			} finally {
-				if(byteBuffer != null){
+				if (byteBuffer != null) {
 					clean(byteBuffer);
 				}
 				if (ch != null) {
 					try {
 						ch.close();
 					} catch (Exception e) {
-						e.printStackTrace();
+						LOG.warn("fail to close channel !", e);
 					}
 				}
 				if (in != null) {
 					try {
 						in.close();
 					} catch (Exception e) {
-						e.printStackTrace();
+						LOG.warn("fail to close file input stream !", e);
 					}
 				}
 			}
@@ -76,7 +79,8 @@ public class FileHashUtil {
 		stringbuffer.append(c0);
 		stringbuffer.append(c1);
 	}
-	
+
+	@SuppressWarnings({ "rawtypes", "unchecked", "restriction" })
 	private static void clean(final Object buffer) throws Exception {
 		AccessController.doPrivileged(new PrivilegedAction() {
 			public Object run() {
@@ -86,7 +90,7 @@ public class FileHashUtil {
 					sun.misc.Cleaner cleaner = (sun.misc.Cleaner) getCleanerMethod.invoke(buffer, new Object[0]);
 					cleaner.clean();
 				} catch (Exception e) {
-					e.printStackTrace();
+					LOG.warn("fail to clean buffer !", e);
 				}
 				return null;
 			}

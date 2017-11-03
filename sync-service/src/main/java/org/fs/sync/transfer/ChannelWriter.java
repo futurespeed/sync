@@ -106,6 +106,7 @@ public class ChannelWriter {
 			File file = new File(filePath);
 			String hash = FileHashUtil.getSha1(file);
 			Map<String, Object> infoMap = new HashMap<String, Object>();
+			infoMap.put("userId", userId);
 			infoMap.put("configId", configId);
 			infoMap.put("name", file.getName());
 			infoMap.put("path", path);

@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
+import org.fs.sync.config.UserConfig;
 import org.fs.sync.util.FileHashUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,7 @@ public class FileReceiveHandler {
 	
 	public void handle(Map<String, Object> infoMap){
 		try{
+			String userId = (String) infoMap.get("userId");
 			String configId = (String) infoMap.get("configId");
 			String name = (String) infoMap.get("name");
 			String path = (String) infoMap.get("path");
@@ -27,7 +29,7 @@ public class FileReceiveHandler {
 			LOG.info("receive file:" + name + ",size:" + size + ",hash:" + hash + ",localFilehash:" + localFilehash);
 			
 			if(localFilehash.equals(hash)){
-				File dir = new File(getPathByConfigId(configId) + path);
+				File dir = new File(getStorageDirPath(userId, configId) + path);
 				if(!dir.exists()){
 					dir.mkdirs();
 				}
@@ -43,9 +45,7 @@ public class FileReceiveHandler {
 		}
 	}
 	
-	protected String getPathByConfigId(String configId){
-		//TODO getPathByConfigId
-		String path = "D:/temp/sync/dest/1";
-		return path;
+	protected String getStorageDirPath(String userId, String configId){
+		return UserConfig.getStorageDirPath(userId, configId);
 	}
 }

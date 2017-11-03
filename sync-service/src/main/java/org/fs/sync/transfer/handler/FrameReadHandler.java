@@ -29,6 +29,7 @@ public class FrameReadHandler {
 		fileReceiveHandler = new FileReceiveHandler();
 	}
 
+	@SuppressWarnings("unchecked")
 	public void read(DataFrame frame) {
 		try {
 			if (3000 == frame.getType()) {

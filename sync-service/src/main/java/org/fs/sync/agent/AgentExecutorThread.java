@@ -7,10 +7,14 @@ import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.fs.sync.transfer.ChannelReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSON;
 
 public class AgentExecutorThread extends Thread{
+	
+	private static final Logger LOG = LoggerFactory.getLogger(AgentExecutorThread.class);
 	
 	private Socket socket;
 	
@@ -36,8 +40,8 @@ public class AgentExecutorThread extends Thread{
 	}
 	
 	public void execute(String cmd) {
+		LOG.trace("receive cmd: " + cmd);
 		Map<?, ?> infoMap = JSON.parseObject(cmd, Map.class);
-		System.out.println(infoMap);
 		String type = String.valueOf(infoMap.get("type"));
 		if("open_read_channel".equals(type)){
 			ChannelReader reader = new ChannelReader();
