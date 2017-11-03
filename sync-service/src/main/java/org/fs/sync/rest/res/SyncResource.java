@@ -35,10 +35,17 @@ public class SyncResource {
 		infoMap.put("type", "open_read_channel");
 		infoMap.put("userId", userId);
 		infoMap.put("configId", configId);
-		ServerContext.getAgentServer().sendCmdToChannel(channelId, JSON.toJSONString(infoMap));
 		
-		resultMap.put("result", "success");
-		resultMap.put("msg", "ok");
+		try{
+			ServerContext.getAgentServer().sendCmdToChannel(channelId, JSON.toJSONString(infoMap));
+			
+			resultMap.put("result", "success");
+			resultMap.put("msg", "ok");
+		}catch(Exception e){
+			LOG.error("fail to open read channel", e);
+			resultMap.put("result", "fail");
+			resultMap.put("msg", e.getMessage());
+		}
 		return JSON.toJSONString(resultMap);
 	}
 }

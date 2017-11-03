@@ -13,6 +13,7 @@ public class UserSetting {
 	public static final String AGENT_DOMAIN = "user.agent.domain";
 	public static final String AGENT_PORT = "user.agent.port";
 	public static final String CONFIG_DB_PATH = "user.config.db.path";
+	public static final String SERVICE_PATH = "user.config.service.path";
 	
 	private static Map<String, String> settingMap = new HashMap<String, String>();
 	

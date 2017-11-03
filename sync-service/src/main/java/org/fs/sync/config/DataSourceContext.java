@@ -33,8 +33,8 @@ public class DataSourceContext {
 		try{
 			DataSource ds_unpooled = DataSources.unpooledDataSource(connectString);  
 			Map<String, Object> overrides = new HashMap<String, Object>();  
-			overrides.put("maxStatements", "200");// Stringified property values work  
-			overrides.put("maxPoolSize", new Integer(50));// "boxed primitives" also work  
+			overrides.put("maxStatements", "50");// Stringified property values work  
+			overrides.put("maxPoolSize", new Integer(10));// "boxed primitives" also work  
 			  
 			// create the PooledDataSource using the default configuration and our overrides  
 			ds = DataSources.pooledDataSource(ds_unpooled, overrides);  
