@@ -14,6 +14,8 @@ import org.fs.sync.opt.TransferOpt;
 public class TestTransferOpt {
 	public static void main(String[] args) {
 		String userId = "1234";
+		String configId = "567";
+		String clientId = UUID.randomUUID().toString().replaceAll("-", "");
 		
 		DataSourceContext.setConnectString("jdbc:sqlite:D:/temp/sync/config_local.db");
 		DataSourceContext.init();
@@ -25,8 +27,8 @@ public class TestTransferOpt {
 		
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("userId", userId);
-		params.put("configId", "567");
-		params.put("clientId", "abc");
+		params.put("configId", configId);
+		params.put("clientId", clientId);
 		params.put("fileList", fileList);
 		
 		TransferOpt.execute(params);

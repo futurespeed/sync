@@ -3,6 +3,7 @@ package org.fs.sync.transfer.handler;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.commons.io.IOUtils;
 import org.fs.sync.transfer.data.DataFrame;
@@ -42,7 +43,7 @@ public class FrameReadHandler {
 					infoMap = null;
 				}
 				infoMap = JSON.parseObject(new String(frame.getData()), Map.class);
-				file = new File(workDir + File.separator + infoMap.get("name") + "._");
+				file = new File(workDir + File.separator + (UUID.randomUUID().toString()) + "._");
 				File dir = file.getParentFile();
 				if(!dir.exists()){
 					dir.mkdirs();

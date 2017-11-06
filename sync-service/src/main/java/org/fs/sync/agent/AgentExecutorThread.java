@@ -1,7 +1,9 @@
 package org.fs.sync.agent;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.Map;
 
@@ -25,11 +27,17 @@ public class AgentExecutorThread extends Thread{
 	@Override
 	public void run() {
 		BufferedReader reader = null;
+		BufferedWriter writer = null;
 		try{
 			reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
+			writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
 			String line = null;
+			String result = null;
 			while ((line = reader.readLine()) != null) {
-				execute(line);
+				result = execute(line);
+				writer.write(result);
+				writer.newLine();
+				writer.flush();
 			}
 		}catch(Exception e){
 			throw new RuntimeException(e);
@@ -39,7 +47,7 @@ public class AgentExecutorThread extends Thread{
 		}
 	}
 	
-	public void execute(String cmd) {
+	public String execute(String cmd) {
 		LOG.trace("receive cmd: " + cmd);
 		Map<?, ?> infoMap = JSON.parseObject(cmd, Map.class);
 		String type = String.valueOf(infoMap.get("type"));
@@ -50,7 +58,9 @@ public class AgentExecutorThread extends Thread{
 //			reader.setWorkDir("D:/temp/sync/work/123");
 			reader.init();
 			reader.open();
+			return "ok";
 		}
 		//TODO
+		return "error";
 	}
 }

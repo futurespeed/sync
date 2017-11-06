@@ -1,10 +1,14 @@
 package org.fs.sync.agent;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
@@ -23,7 +27,9 @@ public class AgentServer {
 	
 	private boolean isRunning = false;
 	
-	private Map<String, Socket> socketChannelMap = new HashMap<String, Socket>();
+	private Map<String, Object> channelMap = new HashMap<String, Object>();
+	
+	private Map<String, Object> userInfoMap = new HashMap<String, Object>();
 	
 	public void start(){
 		try{
@@ -40,24 +46,33 @@ public class AgentServer {
 	}
 	
 	protected void closeAllChannel(){
-		for(Socket s: socketChannelMap.values()){
-			IOUtils.closeQuietly(s);
+		for(Object info: channelMap.values()){
+			Map<String, Object> infoMap = (Map<String, Object>) info;
+			IOUtils.closeQuietly((Socket) infoMap.get("socket"));
 		}
-		socketChannelMap.clear();
+		channelMap.clear();
 	}
 	
-	public void sendCmdToChannel(String channelId, String cmd){
+	public String sendCmdToChannel(String channelId, String cmd){
 		try{
-			Socket socket = socketChannelMap.get(channelId);
-			if(null == socket){
+			Map<String, Object> info = (Map<String, Object>) channelMap.get(channelId);
+			if(null == info){
 				throw new RuntimeException("channel not exists !");
 			}
-			socket.getOutputStream().write(cmd.getBytes("UTF-8"));
-			socket.getOutputStream().write("\n".getBytes("UTF-8"));
-			socket.getOutputStream().flush();
+			BufferedWriter writer = (BufferedWriter) info.get("writer");
+			writer.write(cmd);
+			writer.write("\n");
+			writer.flush();
+			
+			BufferedReader reader = (BufferedReader) info.get("reader");
+			return reader.readLine();
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}
+	}
+	
+	public Map<String, Object> getUserClient(String userId) {
+		return (Map<String, Object>) userInfoMap.get(userId);
 	}
 	
 	static class ConnectThread extends Thread {
@@ -82,7 +97,7 @@ public class AgentServer {
 		}
 	}
 	
-static class ProcessThread extends Thread {
+	static class ProcessThread extends Thread {
 		
 		private AgentServer server;
 		
@@ -100,17 +115,37 @@ static class ProcessThread extends Thread {
 				BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
 				String line = reader.readLine();
 				Map<?, ?> infoMap = JSON.parseObject(line, Map.class);
-				String channelId = infoMap.get("userId") + "_" + infoMap.get("clientId");
-				Socket recentSocket = server.socketChannelMap.get(channelId);
+				String userId = (String) infoMap.get("userId");
+				String clientId = (String) infoMap.get("clientId");
+				String channelId = userId + "_" + clientId;
+				Map<String, Object> channelInfo = (Map<String, Object>) server.channelMap.get(channelId);
 				//TODO permission
-				if(recentSocket != null){
+				if(channelInfo != null){
 					LOG.warn("agent channel [" + channelId + "] already exists, close recent agent socket !");
-					IOUtils.closeQuietly(recentSocket);
+					IOUtils.closeQuietly((Socket) channelInfo.get("socket"));
 				}
-				server.socketChannelMap.put(channelId, socket);
+				channelInfo = new HashMap<String, Object>();
+				channelInfo.put("socket", socket);
+				channelInfo.put("writer", new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8")));
+				channelInfo.put("reader", new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8")));
+				server.channelMap.put(channelId, channelInfo);
+				Map<String, Object> clientInfoMap = (Map<String, Object>) server.userInfoMap.get(userId);
+				List<String> clientIds = null;
+				if(null == clientInfoMap){
+					clientInfoMap = new HashMap<String, Object>();
+					clientInfoMap.put("userId", userId);
+					clientIds = new ArrayList<String>();
+					clientInfoMap.put("clientIds", clientIds);
+					server.userInfoMap.put(userId, clientInfoMap);
+				}else{
+					clientIds = (List<String>) clientInfoMap.get("clientIds");
+					clientIds.clear();
+				}
+				clientIds.add(clientId);
 			}catch(Exception e){
 				throw new RuntimeException(e);
 			}
 		}
 	}
+
 }
