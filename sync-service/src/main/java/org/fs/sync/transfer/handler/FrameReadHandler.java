@@ -12,7 +12,7 @@ import com.alibaba.fastjson.JSON;
 
 public class FrameReadHandler {
 
-	private String workDir = "D:/temp/sync/work";
+	private String workDir = "work";
 	private File file;
 	private FileOutputStream fout;
 	private Map<String, Object> infoMap;

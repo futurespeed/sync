@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
+import org.fs.sync.config.UserSetting;
 import org.fs.sync.transfer.ChannelReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +56,7 @@ public class AgentExecutorThread extends Thread{
 			ChannelReader reader = new ChannelReader();
 			reader.setUserId((String) infoMap.get("userId"));
 			reader.setConfigId((String) infoMap.get("configId"));
-//			reader.setWorkDir("D:/temp/sync/work/123");
+			reader.setWorkDir(UserSetting.getConfig(UserSetting.WORK_DIR));
 			reader.init();
 			reader.open();
 			return "ok";
