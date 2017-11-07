@@ -8,7 +8,6 @@ public class TestUserSetting {
 		DataSourceContext.setConnectString("jdbc:sqlite:D:/temp/sync/config_local.db");
 		DataSourceContext.init();
 		
-		UserSetting.setConfig(UserSetting.CONFIG_DB_PATH, "D:/temp/sync/config_local.db");
 		UserSetting.setConfig(UserSetting.SERVICE_PATH, "http://127.0.0.1:20000");
 		UserSetting.setConfig(UserSetting.WORK_DIR, "D:/temp/sync/work1");
 		UserSetting.storageLocal("1234");

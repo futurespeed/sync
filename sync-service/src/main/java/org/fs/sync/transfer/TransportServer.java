@@ -27,6 +27,10 @@ public class TransportServer {
 	
 	private Map<String, Socket> socketChannelMap = new HashMap<String, Socket>();
 	
+	public void setPort(int port) {
+		this.port = port;
+	}
+
 	public void start(){
 		try{
 			serverSocket = new ServerSocket(port);

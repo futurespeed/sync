@@ -3,6 +3,7 @@ package org.fs.sync.rest;
 import java.net.URI;
 
 import org.fs.sync.config.DataSourceContext;
+import org.fs.sync.config.SystemConfig;
 import org.fs.sync.rest.res.SyncResource;
 import org.glassfish.jersey.netty.httpserver.NettyHttpContainerProvider;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -21,7 +22,8 @@ public class RestContainer {
 		try {
             System.out.println("\"Sync\" Jersey App on Netty container.");
             
-            DataSourceContext.setConnectString("jdbc:sqlite:D:/temp/sync/config.db");
+            SystemConfig.loadConfig();
+            DataSourceContext.setConnectString(SystemConfig.getConfig(SystemConfig.DB_CONNECT_STRING));
     		DataSourceContext.init();
             
             ServerContext.init();

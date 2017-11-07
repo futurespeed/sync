@@ -31,6 +31,11 @@ public class AgentServer {
 	
 	private Map<String, Object> userInfoMap = new HashMap<String, Object>();
 	
+	
+	public void setPort(int port) {
+		this.port = port;
+	}
+
 	public void start(){
 		try{
 			serverSocket = new ServerSocket(port);
