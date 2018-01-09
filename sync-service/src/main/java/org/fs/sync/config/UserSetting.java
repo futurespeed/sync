@@ -14,6 +14,8 @@ public class UserSetting {
 	public static final String AGENT_PORT = "user.agent.port";
 	public static final String SERVICE_PATH = "user.config.service.path";
 	public static final String WORK_DIR = "user.config.workdir";
+	public static final String TRANSPORT_SERVER_DOMAIN = "user.transport.server.domain";
+	public static final String TRANSPORT_SERVER_PORT = "user.transport.server.port";
 	
 	private static Map<String, String> settingMap = new HashMap<String, String>();
 	

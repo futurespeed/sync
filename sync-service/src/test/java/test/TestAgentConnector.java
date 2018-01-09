@@ -15,11 +15,14 @@ public class TestAgentConnector {
 		DataSourceContext.initUserTables();
 		
 		//default setting
-		UserSetting.setConfig(UserSetting.SERVICE_PATH, "http://127.0.0.1:20000");
+		UserSetting.setConfig(UserSetting.SERVICE_PATH, "http://120.79.86.63:20000");
 		UserSetting.setConfig(UserSetting.WORK_DIR, "work");
+		UserSetting.setConfig(UserSetting.TRANSPORT_SERVER_DOMAIN, "120.79.86.63");
+		UserSetting.setConfig(UserSetting.TRANSPORT_SERVER_PORT, "20008");
 		UserSetting.loadLocal(userId);
 
 		AgentConnector ac = new AgentConnector();
+		ac.setIp("120.79.86.63");
 		ac.setUserId(userId);
 		ac.setClientId(UUID.randomUUID().toString().replaceAll("-", ""));
 		ac.open();

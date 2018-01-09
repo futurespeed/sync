@@ -38,6 +38,8 @@ public class TransferOpt {
 		resultMap = JSON.parseObject(result);
 		if("success".equals(resultMap.get("result"))){
 			ChannelWriter writer = new ChannelWriter();
+			writer.setIp(UserSetting.getConfig(UserSetting.TRANSPORT_SERVER_DOMAIN));
+			writer.setPort(Integer.parseInt(UserSetting.getConfig(UserSetting.TRANSPORT_SERVER_PORT)));
 			writer.setUserId(userId);
 			writer.setConfigId(configId);
 			writer.init();

@@ -57,6 +57,8 @@ public class AgentExecutorThread extends Thread{
 			reader.setUserId((String) infoMap.get("userId"));
 			reader.setConfigId((String) infoMap.get("configId"));
 			reader.setWorkDir(UserSetting.getConfig(UserSetting.WORK_DIR));
+			reader.setIp(UserSetting.getConfig(UserSetting.TRANSPORT_SERVER_DOMAIN));
+			reader.setPort(Integer.parseInt(UserSetting.getConfig(UserSetting.TRANSPORT_SERVER_PORT)));
 			reader.init();
 			reader.open();
 			return "ok";
