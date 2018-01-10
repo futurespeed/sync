@@ -147,6 +147,7 @@ public class AgentServer {
 					clientIds.clear();
 				}
 				clientIds.add(clientId);
+				LOG.trace("agent channel [" + channelId + "] opened !");
 			}catch(Exception e){
 				throw new RuntimeException(e);
 			}
