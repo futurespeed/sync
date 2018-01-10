@@ -52,6 +52,6 @@ public class DataFrame implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "{id:" + id + ",type:" + type + ",size" + size + ":,dataId:" + dataId + ",seq:" + seq + "}" ;
+		return "{id:" + id + ",type:" + type + ",size:" + size + ",dataId:" + dataId + ",seq:" + seq + "}" ;
 	}
 }
