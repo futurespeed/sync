@@ -25,31 +25,30 @@ public class TransferOpt {
 		Map<String, Object> resultMap = JSON.parseObject(result);
 		
 		List<String> clientIds = (List<String>) resultMap.get("clientIds");
-		String targetClientId = null;
 		for(String cid: clientIds){
-			if(!StringUtils.equals(cid, clientId)){
-				targetClientId = cid;
+			if(StringUtils.equals(cid, clientId)){
+				continue;
 			}
-		}
-		
-		url = UserSetting.getConfig(UserSetting.SERVICE_PATH) + "/sync/openReadChannel?userId=" + userId
-				+ "&configId=" + configId + "&clientId=" + targetClientId + "&token=" + token;
-		result = httpGet(url);
-		resultMap = JSON.parseObject(result);
-		if("success".equals(resultMap.get("result"))){
-			ChannelWriter writer = new ChannelWriter();
-			writer.setIp(UserSetting.getConfig(UserSetting.TRANSPORT_SERVER_DOMAIN));
-			writer.setPort(Integer.parseInt(UserSetting.getConfig(UserSetting.TRANSPORT_SERVER_PORT)));
-			writer.setUserId(userId);
-			writer.setConfigId(configId);
-			writer.init();
-			try{
-				writer.open();
-				for(Map<String, String> fileInfo: (List<Map<String, String>>) params.get("fileList")){
-					writer.writeFile(fileInfo.get("fileId"), fileInfo.get("localPath"), fileInfo.get("path"));
+			
+			url = UserSetting.getConfig(UserSetting.SERVICE_PATH) + "/sync/openReadChannel?userId=" + userId
+					+ "&configId=" + configId + "&clientId=" + cid + "&token=" + token;
+			result = httpGet(url);
+			resultMap = JSON.parseObject(result);
+			if("success".equals(resultMap.get("result"))){
+				ChannelWriter writer = new ChannelWriter();
+				writer.setIp(UserSetting.getConfig(UserSetting.TRANSPORT_SERVER_DOMAIN));
+				writer.setPort(Integer.parseInt(UserSetting.getConfig(UserSetting.TRANSPORT_SERVER_PORT)));
+				writer.setUserId(userId);
+				writer.setConfigId(configId);
+				writer.init();
+				try{
+					writer.open();
+					for(Map<String, String> fileInfo: (List<Map<String, String>>) params.get("fileList")){
+						writer.writeFile(fileInfo.get("fileId"), fileInfo.get("localPath"), fileInfo.get("path"));
+					}
+				}finally{
+					writer.close();
 				}
-			}finally{
-				writer.close();
 			}
 		}
 	}
