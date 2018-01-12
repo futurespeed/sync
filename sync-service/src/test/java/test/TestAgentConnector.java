@@ -15,14 +15,14 @@ public class TestAgentConnector {
 		DataSourceContext.initUserTables();
 		
 		UserSetting.loadLocal(userId);
-		if(null == UserSetting.getConfig(UserSetting.SERVICE_PATH)){
+		//if(null == UserSetting.getConfig(UserSetting.SERVICE_PATH)){
 			//default setting
-			UserSetting.setConfig(UserSetting.SERVICE_PATH, "http://120.79.86.63:20000");
+			UserSetting.setConfig(UserSetting.SERVICE_PATH, "http://127.0.0.1:20000");
 			UserSetting.setConfig(UserSetting.WORK_DIR, "work");
-			UserSetting.setConfig(UserSetting.TRANSPORT_SERVER_DOMAIN, "120.79.86.63");
-			UserSetting.setConfig(UserSetting.TRANSPORT_SERVER_PORT, "20008");
-			UserSetting.storageLocal(userId);
-		}
+			UserSetting.setConfig(UserSetting.TRANSPORT_SERVER_DOMAIN, "127.0.0.1");
+			UserSetting.setConfig(UserSetting.TRANSPORT_SERVER_PORT, "20007");
+			//UserSetting.storageLocal(userId);
+		//}
 
 		final AgentConnector ac = new AgentConnector();
 		ac.setIp(UserSetting.getConfig(UserSetting.TRANSPORT_SERVER_DOMAIN));

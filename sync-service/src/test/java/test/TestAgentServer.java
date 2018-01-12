@@ -5,11 +5,16 @@ import java.util.Map;
 
 import org.fs.sync.agent.AgentConnector;
 import org.fs.sync.agent.AgentServer;
+import org.fs.sync.config.DataSourceContext;
+import org.fs.sync.config.UserSetting;
 
 import com.alibaba.fastjson.JSON;
 
 public class TestAgentServer {
 	public static void main(String[] args) throws Exception {
+		DataSourceContext.setConnectString("jdbc:sqlite:D:/temp/sync/config_local.db");
+		DataSourceContext.init();
+		UserSetting.loadLocal("1234");
 		AgentServer server = new AgentServer();
 		server.start();
 		

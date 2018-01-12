@@ -1,5 +1,7 @@
 package org.fs.sync.agent;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
@@ -67,7 +69,13 @@ public class AgentConnector {
 			infoMap.put("token", token);
 			infoMap.put("clientId", clientId);
 			socket = new Socket(ip, port);
+			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			String resp = in.readLine();
+			if(!"ok".equals(resp)){
+				throw new RuntimeException("agent server is unavailable!");
+			}
 			socket.getOutputStream().write((JSON.toJSONString(infoMap) + "\n").getBytes("UTF-8"));
+			socket.getOutputStream().flush();
 			new AgentExecutorThread(socket).start();
 		} catch (Exception e) {
 			throw new RuntimeException(e);

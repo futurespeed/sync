@@ -13,7 +13,7 @@ public class SystemConfig {
 	
 	public static synchronized void loadConfig(){
 		try {
-			prop.load(SystemConfig.class.getResourceAsStream("/conf.properties"));
+			prop.load(SystemConfig.class.getClassLoader().getResourceAsStream("/conf.properties"));
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

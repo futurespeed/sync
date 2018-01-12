@@ -44,6 +44,7 @@ public class AgentExecutorThread extends Thread{
 			throw new RuntimeException(e);
 		}finally{
 			IOUtils.closeQuietly(reader);
+			IOUtils.closeQuietly(writer);
 			IOUtils.closeQuietly(socket);
 		}
 	}

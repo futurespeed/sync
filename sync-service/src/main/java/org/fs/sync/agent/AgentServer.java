@@ -91,6 +91,7 @@ public class AgentServer {
 		@Override
 		public void run() {
 			try{
+				LOG.info("[AgentServer] begin to accept clients...");
 				while(server.isRunning){
 					Socket socket = server.serverSocket.accept();
 					(new ProcessThread(server, socket)).start();
@@ -117,6 +118,9 @@ public class AgentServer {
 		@Override
 		public void run() {
 			try{
+				BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
+				writer.write("ok\n");
+				writer.flush();
 				BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
 				String line = reader.readLine();
 				Map<?, ?> infoMap = JSON.parseObject(line, Map.class);
