@@ -29,13 +29,18 @@ public class FileReceiveHandler {
 			LOG.info("receive file:" + name + ",size:" + size + ",hash:" + hash + ",localFilehash:" + localFilehash);
 			
 			if(localFilehash.equals(hash)){
-				File dir = new File(getStorageDirPath(userId, configId) + path);
-				if(!dir.exists()){
-					dir.mkdirs();
+				String dirPath = getStorageDirPath(userId, configId);
+				if(null == dirPath){
+					LOG.warn("ignore file[" + name + "], because local directroy path is not configurated !");
+				}else{
+					File dir = new File(dirPath + path);
+					if(!dir.exists()){
+						dir.mkdirs();
+					}
+					File destFile = new File(dir, name);
+					FileUtils.copyFile(file, destFile);
+					destFile.setLastModified(Long.parseLong(lastModified));
 				}
-				File destFile = new File(dir, name);
-				FileUtils.copyFile(file, destFile);
-				destFile.setLastModified(Long.parseLong(lastModified));
 			}else{
 				LOG.warn("ignore file[" + name + "], because hash is not the same !");
 			}
