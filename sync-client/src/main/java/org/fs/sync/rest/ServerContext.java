@@ -23,8 +23,8 @@ public class ServerContext {
 			throw new RuntimeException("agent is connected!");
 		}
 		AgentConnector ac = new AgentConnector();
-		ac.setIp(UserSetting.getConfig(UserSetting.TRANSPORT_SERVER_DOMAIN));
-		ac.setPort(Integer.parseInt(UserSetting.getConfig(UserSetting.TRANSPORT_SERVER_PORT)));
+		ac.setIp(UserSetting.getConfig(UserSetting.AGENT_SERVER_DOMAIN));
+		ac.setPort(Integer.parseInt(UserSetting.getConfig(UserSetting.AGENT_SERVER_PORT)));
 		ac.setUserId(userId);
 		ac.setClientId(UUID.randomUUID().toString().replaceAll("-", ""));
 		ac.open();

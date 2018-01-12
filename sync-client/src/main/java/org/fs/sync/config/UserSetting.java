@@ -16,6 +16,8 @@ public class UserSetting {
 	public static final String WORK_DIR = "user.config.workdir";
 	public static final String TRANSPORT_SERVER_DOMAIN = "user.transport.server.domain";
 	public static final String TRANSPORT_SERVER_PORT = "user.transport.server.port";
+	public static final String AGENT_SERVER_DOMAIN = "user.agent.server.domain";
+	public static final String AGENT_SERVER_PORT = "user.agent.server.port";
 	
 	private static Map<String, String> settingMap = new HashMap<String, String>();
 	

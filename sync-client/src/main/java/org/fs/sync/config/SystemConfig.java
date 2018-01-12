@@ -1,6 +1,9 @@
 package org.fs.sync.config;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class SystemConfig {
@@ -13,7 +16,13 @@ public class SystemConfig {
 	
 	public static synchronized void loadConfig(){
 		try {
-			prop.load(SystemConfig.class.getClassLoader().getResourceAsStream("/conf.properties"));
+			InputStream in = null;
+			if(System.getProperty("conf-file") != null){
+				in = new FileInputStream(new File(System.getProperty("conf-file")));
+			}else{
+				in = SystemConfig.class.getResourceAsStream("/conf.properties");
+			}
+			prop.load(in);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

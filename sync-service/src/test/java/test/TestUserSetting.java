@@ -11,7 +11,7 @@ public class TestUserSetting {
 		UserSetting.setConfig(UserSetting.SERVICE_PATH, "http://120.79.86.63:20000");
 		UserSetting.setConfig(UserSetting.WORK_DIR, "D:/temp/sync/work1");
 		UserSetting.setConfig(UserSetting.TRANSPORT_SERVER_DOMAIN, "120.79.86.63");
-		UserSetting.setConfig(UserSetting.TRANSPORT_SERVER_PORT, "20007");
+		UserSetting.setConfig(UserSetting.TRANSPORT_SERVER_PORT, "20008");
 		UserSetting.storageLocal("1234");
 	}
 }
