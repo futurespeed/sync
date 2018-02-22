@@ -1,19 +1,18 @@
 package org.fs.sync.agent;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.Socket;
-import java.util.Map;
-
+import com.alibaba.fastjson.JSON;
 import org.apache.commons.io.IOUtils;
 import org.fs.sync.config.UserSetting;
 import org.fs.sync.transfer.ChannelReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.alibaba.fastjson.JSON;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.Socket;
+import java.util.Map;
 
 public class AgentExecutorThread extends Thread{
 	
@@ -53,7 +52,7 @@ public class AgentExecutorThread extends Thread{
 		LOG.trace("receive cmd: " + cmd);
 		Map<?, ?> infoMap = JSON.parseObject(cmd, Map.class);
 		String type = String.valueOf(infoMap.get("type"));
-		if("open_read_channel".equals(type)){
+		if("open_rad_channel".equals(type)){
 			ChannelReader reader = new ChannelReader();
 			reader.setUserId((String) infoMap.get("userId"));
 			reader.setConfigId((String) infoMap.get("configId"));

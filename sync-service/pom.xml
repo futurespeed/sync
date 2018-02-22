@@ -16,6 +16,11 @@
     </build>
     <dependencies>
         <dependency>
+            <groupId>org.fs</groupId>
+            <artifactId>sync-core</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
         </dependency>

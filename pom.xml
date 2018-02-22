@@ -9,6 +9,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
+        <module>sync-core</module>
         <module>sync-service</module>
         <module>sync-client</module>
     </modules>

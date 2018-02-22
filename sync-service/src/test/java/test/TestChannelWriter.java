@@ -1,8 +1,8 @@
 package test;
 
-import java.util.UUID;
-
 import org.fs.sync.transfer.ChannelWriter;
+
+import java.util.UUID;
 
 public class TestChannelWriter {
 	public static void main(String[] args) {

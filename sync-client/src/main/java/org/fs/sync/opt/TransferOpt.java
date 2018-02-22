@@ -10,9 +10,9 @@ import java.util.Map;
 import org.apache.commons.codec.binary.StringUtils;
 import org.apache.commons.io.IOUtils;
 import org.fs.sync.config.UserSetting;
-import org.fs.sync.transfer.ChannelWriter;
 
 import com.alibaba.fastjson.JSON;
+import org.fs.sync.transfer.ChannelWriter;
 
 public class TransferOpt {
 	public static void execute(Map<String, Object> params) {
