@@ -1,7 +1,9 @@
-package org.fs.sync.transfer.handler;
+package org.fs.sync.handler;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -16,7 +18,7 @@ public class FrameReadHandler {
 	private File file;
 	private FileOutputStream fout;
 	private Map<String, Object> infoMap;
-	private FileReceiveHandler fileReceiveHandler;
+	private List<FileHandler> fileHandlers = new ArrayList<FileHandler>();
 
 	public String getWorkDir() {
 		return workDir;
@@ -27,19 +29,25 @@ public class FrameReadHandler {
 	}
 	
 	public void init(){
-		fileReceiveHandler = new FileReceiveHandler();
+
+	}
+
+	public void addFileHandler(FileHandler fileHandler){
+		fileHandlers.add(fileHandler);
 	}
 
 	@SuppressWarnings("unchecked")
 	public void read(DataFrame frame) {
 		try {
-			if (3000 == frame.getType()) {
+			if (DataFrame.TYPE_FI == frame.getType()) {
 				if (fout != null) {
 					IOUtils.closeQuietly(fout);
 					infoMap.put("_temp_path", file.getAbsolutePath());
 					fout = null;
 					file = null;
-					fileReceiveHandler.handle(infoMap);
+					for(FileHandler handler: fileHandlers){
+						handler.handle(infoMap);
+					}
 					infoMap = null;
 				}
 				infoMap = JSON.parseObject(new String(frame.getData()), Map.class);
@@ -50,7 +58,7 @@ public class FrameReadHandler {
 				}
 				file.createNewFile();
 				fout = new FileOutputStream(file);
-			} else if (3001 == frame.getType()) {
+			} else if (DataFrame.TYPE_FC == frame.getType()) {
 				fout.write(frame.getData());
 			}
 		} catch (Exception e) {
@@ -65,10 +73,11 @@ public class FrameReadHandler {
 				infoMap.put("_temp_path", file.getAbsolutePath());
 				fout = null;
 				file = null;
-				fileReceiveHandler.handle(infoMap);
+				for(FileHandler handler: fileHandlers){
+					handler.handle(infoMap);
+				}
 				infoMap = null;
 			}
-//			(new File(workDir)).delete();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

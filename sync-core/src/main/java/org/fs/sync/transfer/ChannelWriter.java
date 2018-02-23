@@ -10,7 +10,7 @@ import java.util.UUID;
 import org.apache.commons.io.IOUtils;
 import org.fs.sync.transfer.data.DataFrame;
 import org.fs.sync.transfer.data.DataFrameSerializer;
-import org.fs.sync.transfer.handler.FrameWriteHandler;
+import org.fs.sync.handler.FrameWriteHandler;
 import org.fs.sync.util.FileHashUtil;
 
 import com.alibaba.fastjson.JSON;
@@ -115,7 +115,7 @@ public class ChannelWriter {
 			infoMap.put("hash", hash);
 			byte[] headData = JSON.toJSONString(infoMap).getBytes("UTF-8");
 			DataFrame headFrame = new DataFrame();
-			headFrame.setType(3000);//FIXME
+			headFrame.setType(DataFrame.TYPE_FI);
 			headFrame.setId(UUID.randomUUID().toString().replaceAll("-", ""));
 			headFrame.setDataId(dataId);
 			headFrame.setSeq(0);
@@ -130,7 +130,7 @@ public class ChannelWriter {
 			while((len = in.read(buf)) != -1){
 				seq++;
 				DataFrame frame = new DataFrame();
-				frame.setType(3001);//FIXME
+				frame.setType(DataFrame.TYPE_FC);
 				frame.setId(UUID.randomUUID().toString().replaceAll("-", ""));
 				frame.setDataId(dataId);
 				frame.setSeq(seq);

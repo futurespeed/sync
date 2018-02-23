@@ -2,9 +2,11 @@ package org.fs.sync.transfer;
 
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import org.fs.sync.transfer.handler.FrameReadHandler;
+import org.fs.sync.handler.FileHandler;
+import org.fs.sync.handler.FrameReadHandler;
 
 import com.alibaba.fastjson.JSON;
 
@@ -25,6 +27,8 @@ public class ChannelReader {
 	private Socket socket;
 	
 	private FrameReadHandler frameReadHandler;
+
+	private List<FileHandler> fileHandlers;
 	
 	public String getIp() {
 		return ip;
@@ -74,10 +78,23 @@ public class ChannelReader {
 		this.workDir = workDir;
 	}
 
+	public List<FileHandler> getFileHandlers() {
+		return fileHandlers;
+	}
+
+	public void setFileHandlers(List<FileHandler> fileHandlers) {
+		this.fileHandlers = fileHandlers;
+	}
+
 	public void init(){
 		frameReadHandler = new FrameReadHandler();
 		if(workDir != null){
 			frameReadHandler.setWorkDir(workDir);
+		}
+		if(fileHandlers != null){
+			for(FileHandler handler: fileHandlers){
+				frameReadHandler.addFileHandler(handler);
+			}
 		}
 	}
 	

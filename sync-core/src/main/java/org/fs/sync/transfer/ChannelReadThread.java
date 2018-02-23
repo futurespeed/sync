@@ -8,7 +8,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.fs.sync.transfer.data.DataFrame;
 import org.fs.sync.transfer.data.DataFrameSerializer;
-import org.fs.sync.transfer.handler.FrameReadHandler;
+import org.fs.sync.handler.FrameReadHandler;
 
 public class ChannelReadThread extends Thread {
 	

@@ -1,4 +1,4 @@
-package org.fs.sync.transfer.handler;
+package org.fs.sync.handler;
 
 import java.io.File;
 import java.util.Map;
@@ -9,7 +9,7 @@ import org.fs.sync.util.FileHashUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class FileReceiveHandler {
+public class FileReceiveHandler implements FileHandler {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(FileReceiveHandler.class);
 	

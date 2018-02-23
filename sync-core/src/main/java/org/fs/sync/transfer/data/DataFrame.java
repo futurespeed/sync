@@ -7,6 +7,8 @@ public class DataFrame implements Serializable {
 	 * serialVersionUID
 	 */
 	private static final long serialVersionUID = 1L;
+	public static final int TYPE_FI = 3000;
+	public static final int TYPE_FC = 3001;
 	private String id;//32
 	private int type;//4
 	private int size;//10

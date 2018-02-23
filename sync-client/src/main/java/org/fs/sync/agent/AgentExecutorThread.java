@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import org.apache.commons.io.IOUtils;
 import org.fs.sync.config.UserSetting;
 import org.fs.sync.transfer.ChannelReader;
+import org.fs.sync.handler.FileHandler;
+import org.fs.sync.handler.FileReceiveHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +14,7 @@ import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.Map;
 
 public class AgentExecutorThread extends Thread{
@@ -59,6 +62,7 @@ public class AgentExecutorThread extends Thread{
 			reader.setWorkDir(UserSetting.getConfig(UserSetting.WORK_DIR));
 			reader.setIp(UserSetting.getConfig(UserSetting.TRANSPORT_SERVER_DOMAIN));
 			reader.setPort(Integer.parseInt(UserSetting.getConfig(UserSetting.TRANSPORT_SERVER_PORT)));
+			reader.setFileHandlers(Arrays.asList(new FileHandler[]{new FileReceiveHandler()}));
 			reader.init();
 			reader.open();
 			return "ok";

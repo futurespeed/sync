@@ -1,4 +1,4 @@
-package org.fs.sync.transfer.handler;
+package org.fs.sync.handler;
 
 import java.io.BufferedWriter;
 import java.io.OutputStreamWriter;
