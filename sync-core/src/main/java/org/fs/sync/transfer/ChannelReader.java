@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.fs.sync.handler.FileHandler;
-import org.fs.sync.handler.FrameReadHandler;
+import org.fs.sync.transfer.handler.FileHandler;
+import org.fs.sync.transfer.handler.FrameReadHandler;
 
 import com.alibaba.fastjson.JSON;
 

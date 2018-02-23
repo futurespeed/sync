@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import org.apache.commons.io.IOUtils;
 import org.fs.sync.config.UserSetting;
 import org.fs.sync.transfer.ChannelReader;
-import org.fs.sync.handler.FileHandler;
+import org.fs.sync.transfer.handler.FileHandler;
 import org.fs.sync.handler.FileReceiveHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

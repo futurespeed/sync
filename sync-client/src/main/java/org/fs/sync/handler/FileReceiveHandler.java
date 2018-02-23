@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.fs.sync.config.UserConfig;
+import org.fs.sync.transfer.handler.FileHandler;
 import org.fs.sync.util.FileHashUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

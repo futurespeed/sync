@@ -1,4 +1,4 @@
-package org.fs.sync.handler;
+package org.fs.sync.transfer.handler;
 
 import java.io.File;
 import java.io.FileOutputStream;

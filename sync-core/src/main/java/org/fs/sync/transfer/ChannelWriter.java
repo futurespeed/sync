@@ -10,7 +10,7 @@ import java.util.UUID;
 import org.apache.commons.io.IOUtils;
 import org.fs.sync.transfer.data.DataFrame;
 import org.fs.sync.transfer.data.DataFrameSerializer;
-import org.fs.sync.handler.FrameWriteHandler;
+import org.fs.sync.transfer.handler.FrameWriteHandler;
 import org.fs.sync.util.FileHashUtil;
 
 import com.alibaba.fastjson.JSON;
