@@ -52,7 +52,6 @@ public class FileReceiveHandler {
 
 	protected String getStorageDirPath(String userId, String configId){
 		//return UserConfig.getStorageDirPath(userId, configId);
-		//FIXME
-		return null;
+		throw new RuntimeException("this method can't be reached!");
 	}
 }
