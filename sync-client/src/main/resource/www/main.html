@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>sync</title>
+</head>
+<body>
+    <div id="login">
+        <div>user id: <input v-model="userId" /><button v-on:click="connect">connect</button>{{msg}}</div>
+        <div>
+            <button v-on:click="listDirs">dirs</button></div>
+            <div>
+                <div v-for="item in dirs">
+                    [{{item.confId}}]{{item.path}}
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="js/vue.min.js"></script>
+<script src="js/axios.min.js"></script>
+<script>
+    var app = new Vue({
+        el: '#login',
+        data: {
+            userId: '1234',
+            msg: '',
+            dirs: []
+        },
+        methods: {
+            connect: function(){
+                var that = this;
+                axios.get('/agent/connect?userId=' + this.userId).then(function(resp){
+                    that.msg = resp.data;
+                },function(err){
+                    console.info(err);
+                });
+            },
+            listDirs: function(){
+                var that = this;
+                axios.get('/config/userDirs?userId=' + this.userId).then(function(resp){
+                    that.dirs = resp.data;
+                },function(err){
+                    console.info(err);
+                });
+            }
+        }
+    });
+</script>
+</html>

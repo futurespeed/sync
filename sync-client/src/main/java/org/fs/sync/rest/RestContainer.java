@@ -5,7 +5,9 @@ import java.net.URI;
 import org.fs.sync.config.DataSourceContext;
 import org.fs.sync.config.SystemConfig;
 import org.fs.sync.rest.res.AgentResource;
+import org.fs.sync.rest.res.ConfigResource;
 import org.fs.sync.rest.res.MainResource;
+import org.fs.sync.rest.res.StaticResource;
 import org.glassfish.jersey.netty.httpserver.NettyHttpContainerProvider;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.slf4j.Logger;
@@ -30,7 +32,7 @@ public class RestContainer {
             
             ServerContext.init();
 
-            ResourceConfig resourceConfig = new ResourceConfig(MainResource.class, AgentResource.class);
+            ResourceConfig resourceConfig = new ResourceConfig(MainResource.class, StaticResource.class, AgentResource.class, ConfigResource.class);
             final Channel server = NettyHttpContainerProvider.createHttp2Server(BASE_URI, resourceConfig, null);
 
             Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {

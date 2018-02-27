@@ -3,7 +3,7 @@ package org.fs.sync.config;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.UUID;
+import java.util.*;
 
 public class UserConfig {
 	
@@ -32,8 +32,10 @@ public class UserConfig {
 		PreparedStatement pstmt = null;
 		try{
 			conn = DataSourceContext.getDataSource().getConnection();
-			pstmt = conn.prepareStatement("delete from USER_DIR where USER_ID=?");
+			conn.setAutoCommit(false);
+			pstmt = conn.prepareStatement("delete from USER_DIR where USER_ID=? and configId=?");
 			pstmt.setString(1, userId);
+			pstmt.setString(2, configId);
 			pstmt.executeUpdate();
 			DataSourceContext.closeResource(null, pstmt, null);
 		}catch(Exception e){
@@ -48,10 +50,35 @@ public class UserConfig {
 			pstmt.setString(3, configId);
 			pstmt.setString(4, path);
 			pstmt.executeUpdate();
+			conn.commit();
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}finally{
 			DataSourceContext.closeResource(conn, pstmt, null);
+		}
+	}
+
+	public static List<Map<String, Object>> getUserDirs(String userId){
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try{
+			conn = DataSourceContext.getDataSource().getConnection();
+			pstmt = conn.prepareStatement("select CONF_ID,PATH from USER_DIR where USER_ID=?");
+			pstmt.setString(1, userId);
+			rs = pstmt.executeQuery();
+			List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+			while(rs.next()){
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("confId", rs.getString(1));
+				map.put("path", rs.getString(2));
+				list.add(map);
+			}
+			return list;
+		}catch(Exception e){
+			throw new RuntimeException(e);
+		}finally{
+			DataSourceContext.closeResource(conn, pstmt, rs);
 		}
 	}
 }
