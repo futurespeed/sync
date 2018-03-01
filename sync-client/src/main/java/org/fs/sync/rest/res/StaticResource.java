@@ -22,6 +22,9 @@ public class StaticResource {
 	public Response main(@PathParam("path") String path) throws Exception{
 		InputStream in = null;
 		in = getClass().getResourceAsStream("/www/" + path);
+		if(null == in){
+		    return Response.status(404).build();
+        }
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		IOUtils.copy(in, out);
 		//return new String(out.toByteArray(), "UTF-8");
