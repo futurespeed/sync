@@ -5,46 +5,118 @@
     <title>sync</title>
 </head>
 <body>
-    <div id="login">
-        <div>user id: <input v-model="userId" /><button v-on:click="connect">connect</button>{{msg}}</div>
-        <div>
-            <button v-on:click="listDirs">dirs</button></div>
-            <div>
-                <div v-for="item in dirs">
-                    [{{item.confId}}]{{item.path}}
-                </div>
-            </div>
+    <div id="app">
+        <div v-show="!!userId">
+            current user: {{userId}}
+            <hr/>
         </div>
+        <router-view></router-view>
     </div>
 </body>
 <script src="js/vue.min.js"></script>
+<script src="js/vue-router.min.js"></script>
 <script src="js/axios.min.js"></script>
+<script src="js/uuid.core.js"></script>
 <script>
-    var app = new Vue({
-        el: '#login',
-        data: {
-            userId: '1234',
-            msg: '',
-            dirs: []
+    var loginCom = {
+        template: '<div>user id: <input v-model="userId" /><button v-on:click="connect">connect</button>{{msg}}</div>',
+        data: function(){
+            return {
+                userId: '1234',
+                msg: ''
+            };
         },
         methods: {
             connect: function(){
                 var that = this;
                 axios.get('/agent/connect?userId=' + this.userId).then(function(resp){
                     that.msg = resp.data;
-                },function(err){
-                    console.info(err);
-                });
-            },
-            listDirs: function(){
-                var that = this;
-                axios.get('/config/userDirs?userId=' + this.userId).then(function(resp){
-                    that.dirs = resp.data;
+                    that.$root.userId = that.userId;
+                    location.href = '#/config';
                 },function(err){
                     console.info(err);
                 });
             }
         }
+    };
+
+    var configCom = {
+        template: '<div><div v-for="(item, index) in dirs">' +
+            '<span v-show="!item.edit">{{item.path}}&nbsp;&nbsp;<a href="javascript:;" v-on:click="toEdit(item, index)">modify</a>&nbsp;<a href="javascript:;" v-on:click="deleteDir(item, index)">delete</a></span>' +
+            '<span v-show="item.edit"><input v-model="item.editPath" />&nbsp;&nbsp;<a href="javascript:;" v-on:click="saveDir(item, index)">save</a>&nbsp;<a href="javascript:;" v-on:click="toggleEdit(item, index)">cancel</a></span>' +
+            '</div><div><a href="javascript:;" v-on:click="addDir()">add</a></div></div>',
+        data: function(){
+            return {
+                dirs: []
+            };
+        },
+        methods: {
+            toEdit: function(item, index){
+                item.editPath = item.path;
+                item.edit = true;
+                Vue.set(this.dirs, index, item);
+            },
+            toggleEdit: function(item, index){
+                item.edit = !item.edit;
+                Vue.set(this.dirs, index, item);
+            },
+            addDir: function(){
+                var item = {userId: this.$root.userId, confId: UUID.generate().replace(/-/g, ''), editPath: '', edit: true};
+                Vue.set(this.dirs, this.dirs.length, item)
+            },
+            listDirs: function(){
+                var that = this;
+                axios.get('/config/userDirs?userId=' + this.$root.userId).then(function(resp){
+                    that.dirs = resp.data;
+                },function(err){
+                    console.info(err);
+                });
+            },
+            saveDir: function(item, index){
+                var that = this;
+                axios.get('/config/storageUserDir?userId=' + this.$root.userId + '&configId=' + item.confId + '&path=' + item.editPath + '&token=').then(function(resp){
+                    if(resp.data && 'success' == resp.data.result){
+                        item.path = item.editPath;
+                        item.edit = false;
+                        Vue.set(that.dirs, index, item);
+                    }
+                },function(err){
+                    console.info(err);
+                });
+            },
+            deleteDir: function(item, index){
+                var that = this;
+                axios.get('/config/deleteUserDir?userId=' + this.$root.userId + '&configId=' + item.confId + '&token=').then(function(resp){
+                    if(resp.data && 'success' == resp.data.result){
+                        Vue.delete(that.dirs, index);
+                    }
+                },function(err){
+                    console.info(err);
+                });
+            }
+        },
+        created: function(){
+            if(!this.$root.userId){
+                location.href = '#/';
+            }
+            this.listDirs();
+        }
+    };
+
+    var router = new VueRouter({
+        routes: [
+            {path: '/', component: loginCom},
+            {path: '/config', component: configCom}
+        ]
     });
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            userId: ''
+        },
+        router: router
+    });
+
 </script>
 </html>

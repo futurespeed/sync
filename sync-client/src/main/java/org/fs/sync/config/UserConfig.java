@@ -33,7 +33,7 @@ public class UserConfig {
 		try{
 			conn = DataSourceContext.getDataSource().getConnection();
 			conn.setAutoCommit(false);
-			pstmt = conn.prepareStatement("delete from USER_DIR where USER_ID=? and configId=?");
+			pstmt = conn.prepareStatement("delete from USER_DIR where USER_ID=? and CONF_ID=?");
 			pstmt.setString(1, userId);
 			pstmt.setString(2, configId);
 			pstmt.executeUpdate();
@@ -57,6 +57,22 @@ public class UserConfig {
 			DataSourceContext.closeResource(conn, pstmt, null);
 		}
 	}
+
+    public static void deleteUserDir(String userId, String configId){
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try{
+            conn = DataSourceContext.getDataSource().getConnection();
+            pstmt = conn.prepareStatement("delete from USER_DIR where USER_ID=? and CONF_ID=?");
+            pstmt.setString(1, userId);
+            pstmt.setString(2, configId);
+            pstmt.executeUpdate();
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }finally{
+            DataSourceContext.closeResource(conn, pstmt, null);
+        }
+    }
 
 	public static List<Map<String, Object>> getUserDirs(String userId){
 		Connection conn = null;

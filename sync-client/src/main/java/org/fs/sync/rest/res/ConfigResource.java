@@ -44,4 +44,22 @@ public class ConfigResource {
         }
         return JSON.toJSONString(result);
     }
+
+    @GET
+    @Produces("application/json")
+    @Path("/deleteUserDir")
+    public String deleteUserDir(@QueryParam("userId") String userId,
+                                 @QueryParam("configId") String configId,
+                                 @QueryParam("token") String token) {
+        LOG.trace("ConfigResource.userDirs[userId: " + userId + ", token: " + token + "]");
+        Map<String, Object> result = new HashMap<String, Object>();
+        try{
+            UserConfig.deleteUserDir(userId, configId);
+            result.put("result", "success");
+        }catch(Exception e){
+            LOG.error("fail to storage user dir", e);
+            result.put("result", "fail");
+        }
+        return JSON.toJSONString(result);
+    }
 }
