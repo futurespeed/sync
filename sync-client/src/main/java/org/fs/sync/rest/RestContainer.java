@@ -4,6 +4,8 @@ import java.net.URI;
 
 import org.fs.sync.config.DataSourceContext;
 import org.fs.sync.config.SystemConfig;
+import org.fs.sync.rest.component.MapMessageBodyReader;
+import org.fs.sync.rest.component.MapMessageBodyWriter;
 import org.fs.sync.rest.res.AgentResource;
 import org.fs.sync.rest.res.ConfigResource;
 import org.fs.sync.rest.res.MainResource;
@@ -32,7 +34,8 @@ public class RestContainer {
             
             ServerContext.init();
 
-            ResourceConfig resourceConfig = new ResourceConfig(MainResource.class, StaticResource.class, AgentResource.class, ConfigResource.class);
+            ResourceConfig resourceConfig = new ResourceConfig(MapMessageBodyReader.class, MapMessageBodyWriter.class,
+                    MainResource.class, StaticResource.class, AgentResource.class, ConfigResource.class);
             final Channel server = NettyHttpContainerProvider.createHttp2Server(BASE_URI, resourceConfig, null);
 
             Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
