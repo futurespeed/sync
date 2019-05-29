@@ -11,7 +11,7 @@ import org.apache.commons.io.IOUtils;
 import org.fs.sync.transfer.data.DataFrame;
 import org.fs.sync.transfer.data.DataFrameSerializer;
 import org.fs.sync.transfer.handler.FrameWriteHandler;
-import org.fs.sync.util.FileHashUtil;
+import org.fs.sync.util.FileHashUtils;
 
 import com.alibaba.fastjson.JSON;
 
@@ -104,7 +104,7 @@ public class ChannelWriter {
 		FileInputStream in = null;
 		try{
 			File file = new File(filePath);
-			String hash = FileHashUtil.getSha1(file);
+			String hash = FileHashUtils.getSha1(file);
 			Map<String, Object> infoMap = new HashMap<String, Object>();
 			infoMap.put("userId", userId);
 			infoMap.put("configId", configId);

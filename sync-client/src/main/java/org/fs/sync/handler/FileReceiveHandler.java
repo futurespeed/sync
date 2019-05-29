@@ -6,7 +6,7 @@ import java.util.Map;
 import org.apache.commons.io.FileUtils;
 import org.fs.sync.config.UserConfig;
 import org.fs.sync.transfer.handler.FileHandler;
-import org.fs.sync.util.FileHashUtil;
+import org.fs.sync.util.FileHashUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +25,7 @@ public class FileReceiveHandler implements FileHandler {
 			String hash = (String) infoMap.get("hash");
 			String tempPath = (String) infoMap.get("_temp_path");
 			File file = new File(tempPath);
-			String localFilehash = FileHashUtil.getSha1(file);
+			String localFilehash = FileHashUtils.getSha1(file);
 			
 			LOG.info("receive file:" + name + ",size:" + size + ",hash:" + hash + ",localFilehash:" + localFilehash);
 			

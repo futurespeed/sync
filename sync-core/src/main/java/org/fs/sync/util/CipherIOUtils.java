@@ -13,7 +13,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
-public class CipherIOUtil {
+public class CipherIOUtils {
 	protected static final String ALGORITHM = "DES"; // 定义加密算法,可用DES,DESede,Blowfish
 
 	// static {

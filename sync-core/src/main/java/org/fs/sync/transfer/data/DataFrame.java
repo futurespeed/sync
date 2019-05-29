@@ -3,18 +3,29 @@ package org.fs.sync.transfer.data;
 import java.io.Serializable;
 
 public class DataFrame implements Serializable {
-	/**
-	 * serialVersionUID
-	 */
-	private static final long serialVersionUID = 1L;
-	public static final int TYPE_FI = 3000;
-	public static final int TYPE_FC = 3001;
+
 	private String id;//32
 	private int type;//4
 	private int size;//10
 	private String dataId;//32
 	private int seq;//10
 	private byte[] data;
+
+	/**
+	 * serialVersionUID
+	 */
+	private static final long serialVersionUID = 1L;
+
+    /**
+     * FILE_INFO
+     */
+	public static final int TYPE_FI = 3000;
+
+    /**
+     * FILE_CONTENT
+     */
+	public static final int TYPE_FC = 3001;
+
 	public String getId() {
 		return id;
 	}
